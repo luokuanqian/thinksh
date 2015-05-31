@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="      
+    http://www.springframework.org/schema/beans       
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd       
+    http://www.springframework.org/schema/context       
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd      
+    http://www.springframework.org/schema/aop      
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd      
+    http://www.springframework.org/schema/tx      
+    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<description>Spring Configuration</description>
+
+	<!-- 加载配置属性文件 
+	<context:property-placeholder ignore-unresolvable="true" location="classpath*:/init.properties" /> -->
+	<!---->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" lazy-init="true">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:/init.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" dependency-check="none">
+		<property name="driverClass">
+			<value>${datasource.mysql.driverClassName}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${datasource.mysql.url}</value>
+		</property>
+		<property name="user">
+			<value>${datasource.mysql.username}</value>
+		</property>
+		<property name="password">
+			<value>${datasource.mysql.password}</value>
+		</property>
+		<property name="initialPoolSize">
+			<value>${c3p0.mysql.initialPoolSize}</value>
+		</property>
+		<property name="minPoolSize">
+			<value>${c3p0.mysql.minPoolSize}</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>${c3p0.mysql.maxPoolSize}</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>${c3p0.acquireIncrement}</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>${c3p0.maxIdleTime}</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>${c3p0.idleConnectionTestPeriod}</value>
+		</property>
+		<property name="maxStatements">
+			<value>${c3p0.maxStatements}</value>
+		</property>
+		<property name="numHelperThreads">
+			<value>${c3p0.numHelperThreads}</value>
+		</property>
+		<property name="acquireRetryAttempts">
+			<value>${c3p0.acquireRetryAttempts}</value>
+		</property>
+		<property name="acquireRetryDelay">
+			<value>${c3p0.acquireRetryDelay}</value>
+		</property>
+		<property name="testConnectionOnCheckin">
+			<value>${c3p0.testConnectionOnCheckin}</value>
+		</property>
+		<property name="checkoutTimeout">
+			<value>${c3p0.checkoutTimeout}</value>
+		</property>
+		<property name="preferredTestQuery">
+			<value>${c3p0.mysql.preferredTestQuery}</value>
+		</property>
+		<property name="unreturnedConnectionTimeout">
+			<value>${c3p0.unreturnedConnectionTimeout}</value>
+			</property>
+		<property name="debugUnreturnedConnectionStackTraces">
+			<value>${c3p0.debugUnreturnedConnectionStackTraces}</value>
+		</property>
+	</bean>
+
+
+	<!--如果Hibernate3这里要改成org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean -->
+	<!--如果Hibernate4这里要改成org.springframework.orm.hibernate4.LocalSessionFactoryBean -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=${hibernate.dialect}
+				hibernate.connection.release_mode=${hibernate.connection.release_mode}
+				hibernate.show_sql=${hibernate.show_sql}
+				hibernate.format_sql=${hibernate.format_sql}
+				<!--hibernate.cache.use_second_level_cache=true hibernate.cache.use_query_cache=true 如果Hibernate3这里缓存配置要改hibernate.cache.provider_class=net.sf.ehcache.hibernate.EhCacheProvider 
+					hibernate.cache.provider_class=net.sf.ehcache.hibernate.EhCacheProvider -->
+				hibernate.jdbc.fetch_size=50
+				hibernate.jdbc.batch_size=30
+			</value>
+		</property>
+
+		<!-- Hibernate @Entity 注解加载 指定相应的包，避免全部扫描和避免在其它包中写实体类 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.thinkmore.business.bean.</value>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- Spring 注解扫描加载 bean -->
+	<context:component-scan base-package="com.thinkmore" />
+
+	<!-- proxy-target-class默认值为false，基于接口的代理(jdk)，否则是基于类的代理(cglib) -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<aop:config proxy-target-class="true" />
+
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
+	<!--如果hibernate3应为org.springframework.orm.hibernate3.HibernateTransactionManager -->
+	<!--如果hibernate4应为org.springframework.orm.hibernate4.HibernateTransactionManager -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- service层事务支持 -->
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="merge*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="do*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- service层事务支持 -->
+	<!-- 第一个*代表任何返回值 com.whaty.products.service..*代表你要拦截com.practice.io.service目录下的以及子目录下的所有类 .*(..)：这个代表任意方法，就是说上面那些类的任意方法，（）里面的点，代表任意参数 -->
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.thinkmore.business.service..*.*(..))" advice-ref="transactionAdvice" />
+	</aop:config>
+
+	<!-- <ehcache:annotation-driven cache-manager="ehCacheManager" /> <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"> 
+		<property name="configLocation" value="classpath:ehcache.xml" /> </bean> -->
+</beans>

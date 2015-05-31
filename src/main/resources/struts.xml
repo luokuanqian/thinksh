@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+        "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.devMode" value="false"/> 
+    <constant name="struts.i18n.reload" value="false"/>
+    <constant name="struts.configuration.xml.reload" value="false"/> 
+    <constant name="struts.convention.classes.reload" value="false" />
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.ui.theme" value="simple"/>
+    <constant name="struts.action.extension" value="action,do"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"/><!--user!login方式为true,user_login通配符为false，零配置使用false会有问题 -->
+     <!--struts.convention零配置 -->
+     <constant name="struts.convention.classes.reload" value="false" />
+	 <constant name="struts.convention.action.mapallmatches" value="true"/>
+	<constant name="struts.convention.action.suffix" value="Action"/><!-- 扫描以Controller为后缀名的类,值只有一个 -->
+    <constant name="struts.convention.action.name.lowercase" value="true"/>
+    <constant name="struts.convention.action.name.separator" value="_"/><!--按以上3个配置，比如为HelloWorldController。按照配置，映射的url为hello_world.jsp  -->
+	<constant name="struts.convention.result.path" value="/WEB-INF/pages"/><!-- action跳转后视图存放位置 -->
+	<constant name="struts.convention.default.parent.package" value="crud-default" /><!-- 默认是default，要使用零配置需要配置成convention-default或者继承它 -->
+	<constant name="struts.convention.package.locators" value="controller,action" /><!-- 指定搜寻包的路径 -->
+	<constant name="struts.convention.package.locators.basePackage" value="com.thinkmore.business" /><!-- 指定搜寻包的根路径 -->
+	<constant name="struts.convention.relative.result.types" value="dispatcher,freemarker,velocity"/><!-- 先找jsp，否则依次查找 -->
+
+	<!-- 用于CRUD Action的parent package，继承了零配置类 -->
+	<package name="crud-default" extends="convention-default">
+		<!-- 基于paramsPrepareParamsStack,增加store interceptor保证actionMessage在redirect后不会丢失 -->
+		<interceptors>
+			<interceptor-stack name="crudStack">
+				<interceptor-ref name="store">
+					<param name="operationMode">AUTOMATIC</param>
+				</interceptor-ref>
+				<!-- 顾名思义，这里的paramsPrepareParamsStack调用interceptor顺序是先params然后prepare最后再params，
+				而defaultStack是直接prepare然后params
+				若Action实现Preparable接口，则Action方法需实现prepare()方法
+				 -->
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="crudStack" />
+	</package>
+</struts>
