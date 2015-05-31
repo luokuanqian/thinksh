@@ -1,5 +1,5 @@
 thinkssh
 =========
 
-struts2.3.20+spring3.2+hibernate4零配置版本
+spring4.0+springmvc4.0+hibernate4版本
 
