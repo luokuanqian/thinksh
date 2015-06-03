@@ -157,6 +157,4 @@
 	</bean>
 
 	<bean id="springUtils" class="com.thinkmore.framework.common.spring.SpringUtils" lazy-init="false" />
-
-	<import resource="spring-cache.xml"/>
 </beans>

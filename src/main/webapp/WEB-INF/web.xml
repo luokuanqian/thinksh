@@ -98,18 +98,6 @@
 		<filter-name>DruidWebStatFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>-->
-	<!-- struts2核心过滤器位于OpenSessionInViewFilter之后 -->
-	<filter>
-		<filter-name>struts2</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>struts2</filter-name>
-    	<url-pattern>*.action</url-pattern>
-    	<url-pattern>*.jsp</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
 	<!-- 错误 页面配置 -->
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>

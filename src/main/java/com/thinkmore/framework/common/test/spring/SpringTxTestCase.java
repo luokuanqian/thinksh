@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.unitils.reflectionassert.ReflectionAssert;
-import org.unitils.reflectionassert.ReflectionComparatorMode;
 /** 
  * @Desc:Spring的支持数据库事务和依赖注入的JUnit4 集成测试基类简写.
  * @author:tudou
@@ -71,18 +69,18 @@ public class SpringTxTestCase extends AbstractTransactionalJUnit4SpringContextTe
 	/**
 	 * 反射比较对象间的所有属性,忽略expected对象的Null对象和集合中对象的次序.
 	 */
-	protected void assertReflectionEquals(Object expected, Object actual) {
-		ReflectionAssert.assertReflectionEquals(expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS,
-				ReflectionComparatorMode.LENIENT_ORDER);
-	}
-
-	/**
-	 * @see #assertReflectionEquals(Object, Object)
-	 */
-	protected void assertReflectionEquals(String message, Object expected, Object actual) {
-		ReflectionAssert.assertReflectionEquals(message, expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS,
-				ReflectionComparatorMode.LENIENT_ORDER);
-	}
+//	protected void assertReflectionEquals(Object expected, Object actual) {
+//		ReflectionAssert.assertReflectionEquals(expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS,
+//				ReflectionComparatorMode.LENIENT_ORDER);
+//	}
+//
+//	/**
+//	 * @see #assertReflectionEquals(Object, Object)
+//	 */
+//	protected void assertReflectionEquals(String message, Object expected, Object actual) {
+//		ReflectionAssert.assertReflectionEquals(message, expected, actual, ReflectionComparatorMode.IGNORE_DEFAULTS,
+//				ReflectionComparatorMode.LENIENT_ORDER);
+//	}
 
 	protected void assertEquals(Object expected, Object actual) {
 		Assert.assertEquals(expected, actual);
