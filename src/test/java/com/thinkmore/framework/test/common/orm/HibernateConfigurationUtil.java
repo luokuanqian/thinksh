@@ -53,6 +53,7 @@ public class HibernateConfigurationUtil {
 		for (Class cls : classes) {
 			if (cls.getAnnotation(javax.persistence.Entity.class) != null) {
 				cf.addAnnotatedClass(cls);
+				//cf.addClass(cls);
 			}
 		}
 		return cf;
