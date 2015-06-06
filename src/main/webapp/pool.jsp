@@ -36,8 +36,7 @@
 			
 			SessionFactory sf = (SessionFactory) SpringUtils.getBean("sessionFactory");
 			Session ss= sf.openSession();
-			SQLQuery query= ss.createSQLQuery("select id from site where id=:id");
-			query.setParameter("id", "1");
+			SQLQuery query= ss.createSQLQuery("select 1");
 			query.list();
 			ss.close();
 			sb.append("###################数据库连接成功################<br/>");
@@ -56,39 +55,10 @@
 		sb.append(e.getMessage()+"<br/>");
 			}
 	%>
-	<div style="text-align: left;">
-		<input type="button" value="停止" id="btnStart" />
-	</div>
 	<div style="text-align: left;" id="myDiv">
 		<%=sb.toString()%>
 	</div>
 
 </body>
 </html>
-<script type="text/javascript">
-	var myDiv=document.getElementById("myDiv");
-	var btnStart = document.getElementById("btnStart");
-	//var sec = document.getElementById("sec");
-	var sec = 1000；
-	var timer=window.setInterval(myrefresh, sec);
-	function myrefresh() {
-		 window.location.reload();
-	}
-	btnStart.onclick = function() {
-		if (this.value == "开始") {
-			this.value = "停止";
-			btnReset.disabled = true;
-			//每<input type="text" value="1" id="sec" />秒刷新&nbsp;&nbsp;&nbsp;
-			//if(isNAN(sec)||sec<=0){
-				//alert("请输入正整数。");
-				//return;
-			//}
-			timer = window.setInterval(myrefresh, sec);
-		} else {
-			this.value = "开始";
-			btnReset.disabled = false;
-			window.clearInterval(timer);
-		}
-	}
-</script>
 
