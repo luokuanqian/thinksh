@@ -157,4 +157,5 @@
 	</bean>
 
 	<bean id="springUtils" class="com.thinkmore.framework.common.spring.SpringUtils" lazy-init="false" />
+	<bean id="myBeanFactoryPostProcessor" class="com.thinkmore.framework.common.spring.MyBeanFactoryPostProcessor" />
 </beans>
