@@ -1,1 +1,6 @@
 /* Write your styles */
+body {
+	color:#333;
+	font-family: "Comic Sans MS", "宋体", Arial;
+	font-size:12px;
+}

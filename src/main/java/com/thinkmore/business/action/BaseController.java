@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * 
  * @author lizhuang
  */
-public class BaseAction {
-	protected static final Log logger = LogFactory.getLog("BaseActionLogger");
+public class BaseController {
+	protected static final Log otherLogger = LogFactory.getLog("other");
 
 	private String toUrl;
 	protected HttpServletRequest request;

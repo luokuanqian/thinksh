@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.thinkmore.framework.orm.hibernate.bean.IdStringEntity;
 
 /**
@@ -20,18 +18,18 @@ public class Site extends IdStringEntity {
 	private String title;
 	@Column(length=50)
 	private String shortSiteName;
-	@NotEmpty
 	@Column(length=100)
 	private String siteName;
 	@Column(length=50)
-	private String siteDomain;
-	@NotEmpty
+	private String domain;
 	@Column(length=20)
 	private String code;
 	private String logo;
 	private String copyright;
 	@Column(length=2)
 	private String stat;
+	@Column(length=10)
+	private String path;
 	private String note;
 
 	public String getTitle() {
@@ -58,12 +56,12 @@ public class Site extends IdStringEntity {
 		this.siteName = siteName;
 	}
 
-	public String getSiteDomain() {
-		return siteDomain;
+	public String getDomain() {
+		return domain;
 	}
 
-	public void setSiteDomain(String siteDomain) {
-		this.siteDomain = siteDomain;
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 
 	public String getCode() {
@@ -104,5 +102,13 @@ public class Site extends IdStringEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

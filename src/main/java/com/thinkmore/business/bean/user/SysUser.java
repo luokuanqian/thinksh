@@ -1,11 +1,15 @@
 package com.thinkmore.business.bean.user;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.thinkmore.business.bean.site.Site;
 import com.thinkmore.framework.orm.hibernate.bean.IdStringEntity;
 
@@ -24,8 +28,10 @@ public class SysUser extends IdStringEntity{
 	private String trueName;
 	private String sex;
 	private String email;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastLoginDate;
 	private String lastLoginIp;
+	@Column(columnDefinition="bigint default 0")
 	private Long loginNum;
 	private String stat;// 状态
 	private String operateUser;// 操作人

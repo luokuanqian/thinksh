@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
+	<Properties>
+		<property name="logPath">logs</property>
+		<property name="size">300MB</property>
+		<property name="interval">24</property>
+		<property name="rolloverNo">20</property>
+	</Properties>
+	<ThresholdFilter level="trace" />
+	<Appenders>
+		<Console name="stdout" target="SYSTEM_OUT">
+			<PatternLayout pattern="%-d{yyyy-MM-dd HH:mm:ss,SSS} %L - %m%n" />
+		</Console>
+		<RollingFile name="error" filename="${logPath}/error.log" filepattern="${logPath}/%d{yyyy-MM-dd}-error.log" immediateFlush="true" append="true">
+			<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingFile>
+		<RollingRandomAccessFile name="action" filename="${logPath}/action.log" filepattern="${logPath}/%d{yyyy-MM-dd}-action.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="service" filename="${logPath}/service.log" filepattern="${logPath}/%d{yyyy-MM-dd}-service.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="dao" filename="${logPath}/dao.log" filepattern="${logPath}/%d{yyyy-MM-dd}-dao.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="slowLog" filename="${logPath}/slowLog.log" filepattern="${logPath}/%d{yyyy-MM-dd}-slowLog.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="slowLogfilter" filename="${logPath}/slowLogfilter.log" filepattern="${logPath}/%d{yyyy-MM-dd}-slowLogfilter.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="login" filename="${logPath}/login.log" filepattern="${logPath}/%d{yyyy-MM-dd}-login.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="test" filename="${logPath}/test.log" filepattern="${logPath}/%d{yyyy-MM-dd}-test.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="other" filename="${logPath}/other.log" filepattern="${logPath}/%d{yyyy-MM-dd}-other.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%thread] [%file:%line] - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${size}" />
+				<TimeBasedTriggeringPolicy modulate="true" interval="${interval}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${rolloverNo}" />
+		</RollingRandomAccessFile>
+	</Appenders>
+	<Loggers>
+		<!-- <logger name="org.springframework" level="info" /> -->
+		<Logger name="error" level="error" additivity="false">
+			<AppenderRef ref="error" />
+		</Logger>
+		<AsyncLogger name="action" level="debug" additivity="false">
+			<AppenderRef ref="action" />
+		</AsyncLogger>
+		<AsyncLogger name="service" level="debug" additivity="false">
+			<AppenderRef ref="service" />
+		</AsyncLogger>
+		<AsyncLogger name="dao" level="debug" additivity="false">
+			<AppenderRef ref="dao" />
+		</AsyncLogger>
+		<AsyncLogger name="slowLog" level="debug" additivity="false">
+			<AppenderRef ref="slowLog" />
+		</AsyncLogger>
+		<AsyncLogger name="slowLogfilter" level="debug" additivity="false">
+			<AppenderRef ref="slowLogfilter" />
+		</AsyncLogger>
+		<AsyncLogger name="login" level="debug" additivity="false">
+			<AppenderRef ref="login" />
+		</AsyncLogger>
+		<AsyncLogger name="test" level="debug" additivity="false">
+			<AppenderRef ref="test" />
+		</AsyncLogger>
+		<AsyncLogger name="other" level="debug">
+			<AppenderRef ref="other" />
+		</AsyncLogger>
+		<AsyncLogger name="stdout" level="debug">
+			<AppenderRef ref="stdout" />
+		</AsyncLogger>
+		<root level="debug" includeLocation="true">
+			<appender-ref ref="other" />
+			<appender-ref ref="stdout" />
+		</root>
+	</Loggers>
+
+</Configuration>

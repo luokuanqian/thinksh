@@ -1,7 +1,8 @@
 package com.thinkmore.business.bean.site;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.thinkmore.framework.orm.hibernate.bean.IdStringEntity;
@@ -15,19 +16,12 @@ import com.thinkmore.framework.orm.hibernate.bean.IdStringEntity;
 @Table(name = "site_adapter")
 public class SiteAdapter extends IdStringEntity {
 	private static final long serialVersionUID = 1L;
-	@Column(length = 40)
-	private String siteId;
+	@ManyToOne
+	@JoinColumn(name = "fk_site_id")
+	private Site site;
 	private String fromUrl;// 来源地址
 	private String toUrl;// 映射地址
 	private String note;
-
-	public String getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(String siteId) {
-		this.siteId = siteId;
-	}
 
 	public String getFromUrl() {
 		return fromUrl;
@@ -51,5 +45,12 @@ public class SiteAdapter extends IdStringEntity {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
 	}
 }

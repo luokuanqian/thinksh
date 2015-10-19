@@ -1,7 +1,9 @@
 <script src="${ctx}/js/jquery/core/jquery-2.1.1.min.js"></script>
-<s:if test='#attr.isAmazeui ==null || #attr.isAmazeui =="true"'>
+<c:if test="isAmazeui ==null || #attr.isAmazeui ==true">
 	<script src="${ctx}/js/amazeui/js/amazeui.min.js"></script>
-</s:if>
+</c:if>
 <script>
-$.ajaxSetup({cache : false});
+	$.ajaxSetup({
+		cache : false
+	});
 </script>

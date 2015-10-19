@@ -8,6 +8,12 @@
 package com.thinkmore.framework.orm.hibernate;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Criteria;
@@ -23,6 +29,7 @@ import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.util.Assert;
 import com.thinkmore.framework.utils.ReflectionUtils;
 
@@ -330,5 +337,135 @@ public class SimpleHibernateDao<T, PK extends Serializable> {
 	public String getIdName() {
 		ClassMetadata meta = getSessionFactory().getClassMetadata(entityClass);
 		return meta.getIdentifierPropertyName();
+	}
+	
+	/**
+	 * 批处理
+	 * @param list 多个sql的集合
+	 */
+	public void executeBatch(final List<String> list) {
+		Connection conn = null;
+		Statement st = null;
+		try {
+			conn = SessionFactoryUtils.getDataSource(getSessionFactory()).getConnection();
+			conn.setAutoCommit(false); // 关闭自动提交
+			st = conn.createStatement();
+			for (int i = 1,j=list.size(); i < j; i++) {
+				String sql = list.get(i);
+				st.addBatch(sql);
+				if (i % 240 == 0) {//每240条sql提交一次，以免出现问题
+					st.executeBatch();
+					conn.commit();
+					st.clearBatch();
+				}else if (i % j == 0) {//如果到了末尾，全部提交
+					st.executeBatch();
+					conn.commit();
+					st.clearBatch();
+				}
+			}
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			closeAll(st,conn);
+		}
+	}
+	
+	/**
+	 * 批处理
+	 * @param list 多个sql的集合
+	 */
+	public void executeBatchByPrepare(String sql,final List<String> list) {
+		Connection conn = null;
+		PreparedStatement st = null;
+		try {
+			conn = SessionFactoryUtils.getDataSource(getSessionFactory()).getConnection();
+			conn.setAutoCommit(false); // 关闭自动提交
+			st = conn.prepareStatement(sql);
+			for (int i = 1,j=list.size(); i < j; i++) {
+				Object objs = list.get(i - 1);
+				if (objs instanceof List) {
+					List<Object> values = (List<Object>) objs;
+					for (int h = 1,k=values.size(); h <= k; k++) {
+						Object value = values.get(k - 1);
+						setParameters(st, k, value);
+					}
+				} else {
+					setParameters(st, i, objs);
+				}
+				st.addBatch(sql);
+				if (i % 240 == 0) {//每240条sql提交一次，以免出现问题
+					st.executeBatch();
+					conn.commit();
+					st.clearBatch();
+				}else if (i % j == 0) {//如果到了末尾，全部提交
+					st.executeBatch();
+					conn.commit();
+					st.clearBatch();
+				}
+			}
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			closeAll(st,conn);
+		}
+	}
+	
+	public void setParameters(PreparedStatement ps, int j, Object value) throws SQLException {
+		if (value != null) {
+			if (value instanceof java.lang.Integer) {
+				ps.setInt(j, (Integer) value);
+			} else if (value instanceof java.lang.Long) {
+				ps.setLong(j, (Long) value);
+			} else if (value instanceof java.util.Date) {
+				ps.setTimestamp(j, new java.sql.Timestamp(((Date) value).getTime()));
+			} else if (value instanceof java.sql.Date) {
+				ps.setDate(j, new java.sql.Date(((Date) value).getTime()));
+			} else if (value instanceof java.lang.String) {
+				ps.setString(j, value.toString());
+			} else if (value instanceof java.lang.Double) {
+				ps.setDouble(j, (Double) value);
+			} else if (value instanceof java.lang.Byte) {
+				ps.setByte(j, (Byte) value);
+			} else if (value instanceof java.lang.Character) {
+				ps.setString(j, value.toString());
+			} else if (value instanceof java.lang.Float) {
+				ps.setFloat(j, (Float) value);
+			} else if (value instanceof java.lang.Boolean) {
+				ps.setBoolean(j, (Boolean) value);
+			} else if (value instanceof java.lang.Short) {
+				ps.setShort(j, (Short) value);
+			} else {
+				ps.setObject(j, value);
+			}
+		} else {
+			ps.setNull(j, Types.NULL);
+		}
+	}
+	
+	private void closeAll(Statement st,Connection conn){
+		if (st != null) {
+			try {
+				st.close();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
 	}
 }

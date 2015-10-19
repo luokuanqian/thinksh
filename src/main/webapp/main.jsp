@@ -3,17 +3,20 @@
 <%@ page trimDirectiveWhitespaces="true"%>
 <html xmlns=http://www.w3.org/1999/xhtml>
 <head>
-<script id="whaty" src="http://192.168.43.198:8080/think/js/ysp/adapter3.js?d=<%=new Date().getTime()%>"></script>
-<%--  <script id="whaty" src="http://192.168.10.162:8080/think/js/ysp/adapter3.js?d=<%=new Date().getTime()%>"></script> 
- --%><%@ include file="/public/meta.jsp"%>
+<%-- <script id="allmobilize" src="http://192.168.10.162:8080/think/js/ysp/adapter2.js?d=<%=new Date().getTime()%>"></script>
+ --%>
+<script id="allmobilize" src="http://192.168.43.198:8080/think/js/ysp/adapter2.js?d=<%=new Date().getTime()%>"></script>
+<%@ include file="/public/meta.jsp"%>
 <title>${webname}</title>
 <script src="114.112.69.156:19295/cloudadapter/js/ysp/adapter.js?20150626"></script>
 <script type="text/javascript">
-
 </script>
 </head>
+
 <body>
+ 
 <!--头部-->
+
 	<!--头部-->
 	<div class="header">
     	<div class="logo">

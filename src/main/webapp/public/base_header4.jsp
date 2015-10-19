@@ -11,10 +11,8 @@
 	<c:set var="webname" value="thinkMore" />
 </c:if>
 <html xmlns=http://www.w3.org/1999/xhtml>
-<script id="allmobilize" src="${ctx}/js/ysp/adapter.js?d=<%=new Date().getTime()%>"></script>
 <head>
-<%-- <script id ="allmobilize" src="${ctx}/js/ysp/adapter2.js?d=<%=new Date().getTime()%>"></script>  --%>
-<%-- <script id ="whaty" src="${ctx}/js/ysp/adapter.js?d=<%=new Date().getTime()%>"></script> --%>
+<script id ="allmobilize" src="${ctx}/js/ysp/adapter.js?d=<%=new Date().getTime()%>"></script>
 <%@ include file="/public/meta.jsp"%>
 <title>${webname}</title>
 <script type="text/javascript">
