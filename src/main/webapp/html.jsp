@@ -21,7 +21,7 @@ var $succ=function (result){
 var $w_init=function(){
 	log("ref::"+ref);
 	log("url::"+url);
-	$w_ajax("POST","/mobile/adapterUrl","ref="+ref+"&url="+url,"text",$succ,$fail);
+	$w_ajax("POST","mobile/adapterUrl","ref="+ref+"&url="+url,"text",$succ,$fail);
 }
 </script>
 <%@ include file="/public/base_header3.jsp"%>

@@ -38,8 +38,8 @@
             page: "page.min.js",
             style: "style.min.css",
             script: "script.min.js",
-            targetOrigin:"http://114.112.69.156:19295/cloudadapter"
-    		//targetOrigin:"http://127.0.0.1:8080/think"
+            //targetOrigin:"http://114.112.69.156:19295/cloudadapter"
+    		targetOrigin:"http://127.0.0.1:8080/think"
     		//targetOrigin:"http://192.168.43.198:8080/think"
         }
     };

@@ -3,9 +3,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import com.thinkmore.business.action.BaseController;
 import com.thinkmore.business.bean.site.SiteAdapter;
 import com.thinkmore.business.service.site.SiteAdapterService;
@@ -17,7 +16,7 @@ import com.thinkmore.framework.common.spider.JsoupSpider;
  * @date 2015.06.05
  */
 @Controller
-@RequestMapping("/mobile")
+@RequestMapping(value = "/mobile")
 public class MobileAdapterAction extends BaseController {
 	@Autowired
 	private SiteAdapterService siteAdapterService;
@@ -36,18 +35,17 @@ public class MobileAdapterAction extends BaseController {
 	/**
 	 * 获取指定URL的HTML内容
 	 */
-	@RequestMapping(value = "/adapterUrl/{ref}")
-	public void adapterUrl(@PathVariable String ref) {
+	@RequestMapping(value = "/adapterUrl",produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String adapterUrl() {
 		try {
-			// String fromUrl=request.getHeader("referer");
-			System.out.println("fromUrl:::" + ref);
+			String ref=request.getHeader("referer");
+			//System.out.println("fromUrl:::" + ref);
 			String toUrl = null;
 			otherLogger.error("fromUrl:::" + ref);
 			if (StringUtils.isNotBlank(ref)) {
 				otherLogger.error("getDomainURL:::" + getDomain(ref));
-				// SiteAdapter sa
-				// =siteAdapterService.getDao().findUniqueBy("fromUrl",
-				// fromUrl);
+				// SiteAdapter sa=siteAdapterService.getDao().findUniqueBy("fromUrl", fromUrl);
 				SiteAdapter ad = siteAdapterService.getSiteAdapter(ref, getDomain(ref));
 				if (ad == null) {
 					otherLogger.error("nothing adapter here");
@@ -59,8 +57,7 @@ public class MobileAdapterAction extends BaseController {
 				toUrl = request.getParameter("url");
 			}
 			if (StringUtils.isEmpty(toUrl)) {
-				renderText("1");
-				return;
+				return "1";
 			}
 			otherLogger.error("toUrl:::" + toUrl);
 			// toUrl="http://www.gov.cn/";
@@ -68,14 +65,15 @@ public class MobileAdapterAction extends BaseController {
 			JsoupSpider js = new JsoupSpider();
 			Document doc = js.getHTML(toUrl);
 			if (doc != null) {
-				render(doc.html(), "text/html;charset=UTF-8");
-				// renderHtmlUTF8("$callBack("+doc.html()+");");
+				//render(doc.html());
+				return doc.html();
 			} else {
-				renderText("1");
+				return "1";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "1";
 	}
 
 	public String execute() {

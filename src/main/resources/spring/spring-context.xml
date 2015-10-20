@@ -104,9 +104,6 @@
 
 	</bean>
 
-	<!-- Spring 注解扫描加载 bean -->
-	<context:component-scan base-package="com.thinkmore.business.dao,com.thinkmore.business.service,com.thinkmore.business.action" />
-
 	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
 	<!--如果hibernate3应为org.springframework.orm.hibernate3.HibernateTransactionManager -->
 	<!--如果hibernate4应为org.springframework.orm.hibernate4.HibernateTransactionManager -->
