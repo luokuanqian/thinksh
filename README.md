@@ -1,5 +1,5 @@
-thinkssh
+thinksh
 =========
 
-spring4.0+springmvc4.0+hibernate4版本
+spring4.2.2+springmvc4.2.2+hibernate4.3.11版本
 
